@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fake News Detector - Glass Glow UI</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('https://removal.ai/wp-content/uploads/2021/05/image1.png') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
+    .main-card {
+      position: relative;
+      width: 400px;
+      max-width: 90vw;
+      padding: 40px 36px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 20px rgba(145, 110, 255, 0.4), 0 0 40px rgba(126, 249, 255, 0.2);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      color: #fff;
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.95);}
+      to {opacity: 1; transform: scale(1);}
+    }
+    h1 {
+      font-size: 2em;
+      font-weight: 600;
+      color: #7ef9ff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(120, 200, 255, 0.7);
+    }
+    h2 {
+      font-size: 1.4em;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .analyzer-title {
+      font-size: 2.2em;
+      font-weight: 700;
+      color: #7ef9ff;
+      margin-bottom: 18px;
+      text-shadow: 0 0 5px #7ef9ff, 0 0 10px #7ef9ff, 0 0 20px #00ffff, 0 0 40px #00e6ff, 0 0 80px #0099ff;
+      animation: pulseGlow 2s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      from {text-shadow: 0 0 8px #7ef9ff, 0 0 16px #00ffff;}
+      to {text-shadow: 0 0 18px #7ef9ff, 0 0 36px #00ffff;}
+    }
+    p {
+      color: #e0e0e0;
+      font-size: 0.95em;
+      margin-bottom: 25px;
+      line-height: 1.5em;
+    }
+    .nav-btn, button {
+      width: 140px;
+      padding: 12px;
+      margin: 10px;
+      font-size: 1em;
+      font-weight: 600;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(90deg, #7ef9ff, #916eff);
+      color: #0d0939;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .nav-btn:hover, button:hover {
+      background: linear-gradient(90deg, #9ffaff, #b49cff);
+      box-shadow: 0 0 15px rgba(145, 110, 255, 0.8);
+      transform: scale(1.05);
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .input-group input, textarea {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 1em;
+      outline: none;
+      transition: 0.3s;
+    }
+    .input-group input::placeholder, textarea::placeholder {
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 400;
+    }
+    .input-group input:focus, textarea:focus {
+      border-color: #9cfbff;
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 10px rgba(126, 249, 255, 0.5);
+    }
+    textarea {
+      resize: none;
+      height: 120px;
+    }
+    .link {
+      color: #9fdcff;
+      cursor: pointer;
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.95em;
+    }
+    .link:hover {
+      color: #c4f1ff;
+      text-decoration: underline;
+    }
+    .status-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(20, 25, 45, 0.9);
+      color: #fffba1;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-size: 1em;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      animation: fadeToast 1.5s ease;
+    }
+    @keyframes fadeToast {
+      0% {opacity: 0; transform: translate(-50%, 20px);}
+      30%,80% {opacity: 1; transform: translate(-50%, 0);}
+      100% {opacity: 0; transform: translate(-50%, 20px);}
+    }
+    .side-btn {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      background: none;
+      border: none;
+      font-size: 1.8em;
+      color: #7ef9ff;
+      cursor: pointer;
+      transition: 0.3s;
+      text-shadow: 0 0 10px #7ef9ff, 0 0 20px #00ffff;
+    }
+    .side-btn:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
+    .chart-card {
+      margin-top: 35px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 15px;
+      padding: 18px;
+    }
+    .chart-canvas {
+      width: 160px !important;
+      height: 160px !important;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let currentPage='welcome', fake=0, genuine=0, resultText='', isFake=null, toastTimer=null;
+
+    function renderPage(){
+      const app=document.getElementById('app');
+      let html='';
+      if(currentPage==='welcome'){
+        html=`<div class="main-card">
+          <h1>📰 Fake News Detector</h1>
+          <h2>Welcome</h2>
+          <p>Begin detecting fake news with AI.<br>Click below to get started.</p>
+          <button class="nav-btn" onclick="goPage('register')">Get Start</button>
+        </div>`;
+      }
+      else if(currentPage==='register'){
+        html=`<div class="main-card">
+          <button class="side-btn" onclick="goPage('welcome')">&larr;</button>
+          <h1>📰 Fake News Detector</h1><h2>Register</h2>
+          <form onsubmit="return userRegister()">
+            <div class="input-group">
+              <input id="regUser" type="text" placeholder="Username" required>
+              <input id="regEmail" type="email" placeholder="Email" required>
+              <input id="regPass" type="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Sign Up</button>
+          </form>
+          <div class="link" onclick="goPage('login')">Already have an account? Login</div>
+        </div>`;
+      }
+      else if(currentPage==='login'){
+        html=`<div class="main-card">
+          <button class="side-btn" onclick="goPage('register')">&larr;</button>
+          <h1>📰 Fake News Detector</h1><h2>Login</h2>
+          <form onsubmit="return userLogin()">
+            <div class="input-group">
+              <input id="loginUser" type="text" placeholder="Username" required>
+              <input id="loginPass" type="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Sign In</button>
+          </form>
+          <div class="link" onclick="goPage('register')">New user? Register</div>
+        </div>`;
+      }
+      else if(currentPage==='detector'){
+        html=`<div class="main-card">
+          <button class="side-btn" onclick="goPage('login')">&larr;</button>
+          <h2 class="analyzer-title">Fake News Analyzer</h2>
+          <form onsubmit="return runDetection()">
+            <div class="input-group">
+              <textarea id="newsText" placeholder="Paste news/article text here..." required></textarea>
+            </div>
+            <button type="submit">Analyze</button>
+          </form>
+          <div id="resultMsg">${resultText||''}</div>
+          <div class="chart-card">
+            <canvas id="chart" class="chart-canvas"></canvas>
+            <div>Fake: <b>${fake}</b> | Genuine: <b>${genuine}</b></div>
+          </div>
+        </div>`;
+      }
+      app.innerHTML=html;
+      if(currentPage==='detector')drawChart();
+    }
+
+    function goPage(pg){currentPage=pg;renderPage();}
+    function userRegister(){showToast("Registration successful! Now login.");setTimeout(()=>goPage('login'),1300);return false;}
+    function userLogin(){showToast("Login successful!");setTimeout(()=>goPage('detector'),1000);return false;}
+    function runDetection(){
+      const val=document.getElementById('newsText').value.trim();
+      if(!val)return false;
+      isFake=Math.random()>0.5;
+      resultText=isFake?"❌ This news appears FAKE.":"✅ This news appears GENUINE.";
+      if(isFake)fake++;else genuine++;
+      renderPage();
+      showToast(isFake?"Fake news detected!":"Genuine news detected!");
+      return false;
+    }
+    function drawChart(){
+      const ctx=document.getElementById("chart").getContext("2d");
+      if(window.chart)window.chart.destroy();
+      window.chart=new Chart(ctx,{
+        type:'doughnut',
+        data:{labels:['Fake','Genuine'],datasets:[{data:[fake,genuine],backgroundColor:['#e86e6e','#33fc98']}]},
+        options:{cutout:'70%',plugins:{legend:{display:false}}}
+      });
+    }
+    function showToast(msg){
+      if(document.getElementById('toast'))document.getElementById('toast').remove();
+      const toast=document.createElement('div');
+      toast.className='status-toast';
+      toast.id='toast';
+      toast.textContent=msg;
+      document.body.appendChild(toast);
+      if(toastTimer)clearTimeout(toastTimer);
+      toastTimer=setTimeout(()=>toast.remove(),1500);
+    }
+
+    renderPage();
+  </script>
+</body>
+</html>
